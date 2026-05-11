@@ -60,7 +60,7 @@ export default async function Page() {
     <div className="docs-app">
       <header className="topbar">
         <div>
-          <p className="eyebrow">PXP</p>
+          <p className="eyebrow">sedhehe</p>
           <h1>{doc.title}</h1>
           <p className="topbar-copy">{doc.intro}</p>
         </div>
@@ -108,21 +108,21 @@ export default async function Page() {
           <div className="panel">
             <p className="panel-label">Download OpenAPI description</p>
             <div className="download-list">
-              <div className="download-item">
+              <a className="download-item" href="/api/download?file=api-reference.md">
                 <span className="download-name">api-reference.md</span>
-                <span className="download-meta">source content</span>
-              </div>
-              <div className="download-item">
+                <span className="download-meta">download markdown</span>
+              </a>
+              <a className="download-item" href="/api/download?file=api-reference.md">
                 <span className="download-name">docs/v2/api-reference.md</span>
-                <span className="download-meta">reference input</span>
-              </div>
+                <span className="download-meta">download source file</span>
+              </a>
             </div>
           </div>
 
           <div className="panel">
             <p className="panel-label">Languages</p>
             <div className="language-grid">
-              {['curl', 'JavaScript', 'Node.js', 'Python', 'Java', 'C#', 'PHP', 'Go', 'Ruby'].map((language) => (
+              {['Python', 'JavaScript'].map((language) => (
                 <span key={language} className="language-pill">
                   {language}
                 </span>
@@ -148,13 +148,6 @@ export default async function Page() {
             </div>
           </div>
 
-          <div className="panel panel-muted">
-            <p className="panel-label">Notes</p>
-            <p className="small-copy">
-              The Ask AI button stays pinned in the bottom-right corner so the docs remain visible while the assistant
-              is open.
-            </p>
-          </div>
         </aside>
       </div>
 

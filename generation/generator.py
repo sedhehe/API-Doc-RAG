@@ -1,6 +1,6 @@
 import ollama
 
-from config import LLM_MODEL, OLLAMA_BASE_URL
+from config import LLM_MODEL ,REWRITE_MODEL, OLLAMA_BASE_URL
 from generation.prompt import build_prompt
 from retrieval.retriever import retrieve
 
@@ -27,7 +27,7 @@ def rewrite_query(query: str, history: list[dict]) -> str:
         }
     ]
     
-    response = client.chat(model=LLM_MODEL, messages=messages)
+    response = client.chat(model=REWRITE_MODEL, messages=messages)
     rewritten = response.message.content.strip()
     return rewritten
 

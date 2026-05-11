@@ -90,11 +90,9 @@ rag-api/
 │   ├── __init__.py
 │   ├── prompt.py                  ← assembles context + prompt
 │   └── generator.py               ← calls Ollama LLM
-├── api/
-│   ├── __init__.py
-│   └── routes.py                  ← FastAPI endpoints
+│               
 ├── config.py                      ← all settings in one place
-└── main.py                        ← entry point
+└── main.py                        ← FastAPI endpoints
 ```
 
 **Why this structure:** Each folder = one stage of the pipeline. When something breaks, you know exactly which file to look at.
@@ -560,63 +558,6 @@ Long verbose rewrites create blurry embeddings. Force max 8 words, no filler sen
 ### History is managed client-side
 The server returns updated history with every response. The frontend sends it back with the next request. This keeps the API stateless — no session storage needed on the server.
 
----
-
-## 15. What To Build Next
-
-### Immediate
-- [x] `indexing/chunker.py` ✅
-- [x] `indexing/embedder.py` ✅
-- [x] `indexing/writer.py` ✅
-- [x] `indexing/pipeline.py` ✅
-- [x] `retrieval/retriever.py` ✅ hybrid search
-- [x] `generation/prompt.py` ✅ lost middle fix
-- [x] `generation/generator.py` ✅ query rewriting + history
-- [ ] `api/routes.py` — FastAPI REST endpoint
-- [ ] `main.py` — server entry point
-- [ ] Next.js frontend — WebSocket chat UI with source attribution
-
-### API Design (next step)
-One endpoint handles everything:
-
-```
-POST /query
-Request:  { "query": "...", "history": [] }
-Response: { "answer": "...", "sources": [...], "history": [...] }
-```
-
-Sources array shape (returned to frontend):
-```json
-[
-  {
-    "title":    "Create User",
-    "section":  "Users",
-    "url":      "/docs/v2/api_reference#create-user"
-  }
-]
-```
-
-History is managed client-side — frontend sends it with each request, backend returns it updated. This keeps the server stateless.
-
-### Quality improvements
-- [ ] Similarity threshold filtering (drop results below 0.75)
-- [ ] Evaluation dataset — 30-50 question-answer pairs
-- [ ] Measure Context Recall@3 across eval set
-
-### Production readiness
-- [ ] File hashing for incremental re-indexing (skip unchanged files)
-- [ ] Orphan chunk cleanup (delete chunks from deleted sections)
-- [ ] Swap ChromaDB → Pinecone or Qdrant
-- [ ] Swap Ollama → Gemini API for embeddings + generation
-- [ ] Deploy to AWS
-
-### Nice to have
-- [ ] Metadata filtering by version in retrieval
-- [ ] Reranker for better precision
-- [ ] Streaming responses from LLM
-
----
-
 ## Config Reference
 
 ```python
@@ -627,6 +568,7 @@ COLLECTION_NAME = "api_docs"
 OLLAMA_BASE_URL = "http://localhost:11434"
 EMBED_MODEL     = "nomic-embed-text"
 LLM_MODEL       = "qwen3"
+REWRITE_MODEL   = "qwen3:1b"
 ```
 
 ## Models Reference
@@ -634,7 +576,8 @@ LLM_MODEL       = "qwen3"
 | Model | Purpose | Dimensions |
 |---|---|---|
 | nomic-embed-text | Embeddings | 768 |
-| qwen3 | Generation + query rewriting | — |
+| qwen3 | Generation | — |
+| qwen3:1b | Query rewriting | — |
 
 ## Commands Reference
 
